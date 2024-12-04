@@ -37,7 +37,6 @@ jobs:
     - name: Install back dependencies
       working-directory: ./backend
       run: npm install
-    
 
     - name: Push changes to test branch
       run: |
