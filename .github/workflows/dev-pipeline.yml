@@ -34,13 +34,15 @@ jobs:
       working-directory: ./frontend
       run: npm run test
 
-    - name: Run security audit and fix issues
+    - name: Run security audit
       working-directory: ./frontend
       run: |
-        echo "Running security audit..."
+        echo "Running security audit for high-severity vulnerabilities..."
         npm audit --audit-level=high
-        echo "Fixing vulnerabilities..."
-        npm audit fix --force || echo "Some vulnerabilities could not be automatically fixed. Please review manually."
+        echo "Attempting to fix high-severity vulnerabilities..."
+        npm audit fix || echo "Some vulnerabilities could not be automatically fixed. Please review manually."
+        echo "Running force audit fix to address all issues (including breaking changes)..."
+        npm audit fix --force || echo "Some vulnerabilities still require manual intervention."
 
 
     - name: Build frontend
