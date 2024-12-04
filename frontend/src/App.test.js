@@ -1,8 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen, act } from '@testing-library/react';
 
-test('renders learn react link', () => {
+test('renders react frontend heading', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+  const linkElement = screen.getByText(/react frontend/i); // Updated text matcher
   expect(linkElement).toBeInTheDocument();
 });
