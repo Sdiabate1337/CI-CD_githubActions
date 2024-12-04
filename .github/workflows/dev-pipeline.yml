@@ -53,8 +53,6 @@ jobs:
       run: |
         git add .
         git commit -m "Committing changes before switching branches"
-        git push origin main  # or the current branch you're working on
-        git fetch --all  # Fetch all branches
-        git checkout test  # Checkout the test branch
+        git push  # or the current branch you're working on
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
