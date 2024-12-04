@@ -37,12 +37,19 @@ jobs:
     - name: Install back dependencies
       working-directory: ./backend
       run: npm install
-
-    - name: Push changes to test branch
+    
+    - name: Stash changes
       run: |
-        git fetch --all
-        git checkout test
-        git merge dev
-        git push origin test
+        git stash push -m "Stashing uncommitted changes"
+        git fetch --all  # Fetch all branches
+        git checkout test  # Checkout the test branch
+
+    - name: Commit changes
+      run: |
+        git add .
+        git commit -m "Committing changes before switching branches"
+        git push origin main  # or the current branch you're working on
+        git fetch --all  # Fetch all branches
+        git checkout test  # Checkout the test branch
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
