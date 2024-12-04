@@ -1,4 +1,4 @@
-name: CI - Dev Branch
+name: CI for dev
 
 on:
   push:
@@ -6,44 +6,52 @@ on:
       - dev
 
 jobs:
-  quality-and-security:
+  build_and_test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Ou la version que vous utilisez
 
-      - name: Install dependencies - Frontend
-        run: npm install
-        working-directory: ./frontend
+    - name: Cache node modules
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules-
 
-      - name: Install dependencies - Backend
-        run: npm install
-        working-directory: ./backend
+    - name: Install dependencies
+      run: npm install
 
-      - name: Run code quality checks (ESLint)
-        run: npm run lint
-        working-directory: ./frontend
+    - name: Lint code
+      run: npm run lint
 
-      - name: Run security scan (TruffleHog)
-        run: npx trufflehog ./backend
+    - name: Run tests
+      run: npm run test
 
-      - name: Build and test - Frontend
-        run: npm run build
-        working-directory: ./frontend
+    - name: Run security audit
+      run: npm audit --audit-level=high
 
-      - name: Test Backend
-        run: npm test
-        working-directory: ./backend
+    - name: Build frontend
+      run: |
+        cd frontend
+        npm run build
 
-      - name: Merge to test branch
-        uses: peter-evans/create-pull-request@v5
-        with:
-          branch: test
-          title: Merge dev to test
-          commit-message: "Automated merge from dev to test"
+    - name: Build backend
+      run: |
+        cd backend
+        npm run build  # Ajoutez ce script dans le package.json du backend si nécessaire
+
+    - name: Push changes to test branch
+      run: |
+        git checkout test
+        git merge dev
+        git push origin test
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
