@@ -38,15 +38,6 @@ jobs:
       working-directory: ./backend
       run: npm install
     
-    - name: Build frontend
-      run: |
-        cd frontend
-        npm run build
-
-    - name: Build backend
-      run: |
-        cd backend
-        node server.js  # Ajoutez ce script dans le package.json du backend si nécessaire
 
     - name: Push changes to test branch
       run: |
