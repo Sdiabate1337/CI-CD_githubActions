@@ -54,4 +54,4 @@ jobs:
         git merge dev
         git push origin test
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
