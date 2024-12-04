@@ -1,0 +1,49 @@
+name: Dev Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  test-and-merge:
+    name: Test, Build, and Merge to Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # 3. Lint and build Frontend
+      - name: Lint and Build Frontend
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm run lint || exit 1
+          npm run build
+
+      # 4. Lint and build Backend
+      - name: Lint and Build Backend
+        working-directory: ./backend
+        run: |
+          npm install
+          npm run lint || exit 1
+          npm run build
+
+      # 5. Merge to Test Branch
+      - name: Merge to Test Branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout test
+          git merge dev --no-ff --commit -m "CI: Merge from dev to test"
+          git push origin test
+
+
