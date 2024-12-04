@@ -21,14 +21,14 @@ jobs:
         with:
           node-version: 18
 
-      # 3. Lint and build Frontend
+      # 3. build Frontend
       - name: Lint and Build Frontend
         working-directory: ./frontend
         run: |
           npm install
           npm run build
 
-      # 4. Lint and build Backend
+      # 4.  build Backend
       - name: Lint and Build Backend
         working-directory: ./backend
         run: |
