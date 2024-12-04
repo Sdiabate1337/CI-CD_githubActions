@@ -16,7 +16,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Ou la version que vous utilisez
+        node-version: '16'
 
     - name: Cache node modules
       uses: actions/cache@v3
@@ -26,33 +26,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-modules-
 
-    - name: Install dependencies
+    - name: Install frontend dependencies
       working-directory: ./frontend
       run: npm install
 
-    - name: Run tests
+    - name: Run frontend tests
       working-directory: ./frontend
       run: npm run test
 
-    - name: Install back dependencies
+    - name: Install backend dependencies
       working-directory: ./backend
       run: npm install
-    
-    - name: Stash changes
-      run: |
-        git stash push -m "Stashing uncommitted changes"
-        git fetch --all  # Fetch all branches
-        git checkout test  # Checkout the test branch
 
-    - name: Set Git user identity
-      run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-    
-    - name: Commit changes
-      run: |
-        git add .
-        git commit -m "Committing changes before switching branches"
-        git push  # or the current branch you're working on
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
