@@ -46,7 +46,7 @@ jobs:
     - name: Build backend
       run: |
         cd backend
-        npm run build  # Ajoutez ce script dans le package.json du backend si nécessaire
+        node server.js  # Ajoutez ce script dans le package.json du backend si nécessaire
 
     - name: Push changes to test branch
       run: |
