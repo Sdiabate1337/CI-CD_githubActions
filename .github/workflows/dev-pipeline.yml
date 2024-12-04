@@ -41,8 +41,6 @@ jobs:
         npm audit --audit-level=high
         echo "Attempting to fix high-severity vulnerabilities..."
         npm audit fix || echo "Some vulnerabilities could not be automatically fixed. Please review manually."
-        echo "Running force audit fix to address all issues (including breaking changes)..."
-        npm audit fix --force || echo "Some vulnerabilities still require manual intervention."
 
 
     - name: Build frontend
