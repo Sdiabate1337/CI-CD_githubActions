@@ -27,6 +27,7 @@ jobs:
           ${{ runner.os }}-node-modules-
 
     - name: Install dependencies
+      working-directory: ./frontend
       run: npm install
 
     - name: Lint code
